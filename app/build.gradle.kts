@@ -51,6 +51,10 @@ dependencies {
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.rxJava.core)
     implementation(libs.rxAndroid)
+    implementation(libs.rxAdapter)
+    implementation(libs.retrofit)
+    implementation(libs.gson)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
