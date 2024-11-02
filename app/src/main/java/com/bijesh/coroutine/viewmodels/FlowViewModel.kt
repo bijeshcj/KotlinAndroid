@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapConcat
@@ -25,6 +26,10 @@ import kotlinx.coroutines.withContext
 
 class FlowViewModel : ViewModel() {
 
+    companion object{
+        const val TAG : String = "FlowViewModel"
+    }
+
     var flowRepository: FlowRepository = FlowRepository()
 
     val _totalPrice : MutableStateFlow<Double> = MutableStateFlow(0.0)
@@ -38,6 +43,21 @@ class FlowViewModel : ViewModel() {
 
     private val _flowOperator : MutableStateFlow<Int> = MutableStateFlow(1)
     val flowOperator = _flowOperator.asStateFlow()
+
+
+    private val _flowOfPersonNames : MutableStateFlow<String> = MutableStateFlow("")
+    val flowOfPersonNames = _flowOfPersonNames.asStateFlow()
+
+
+
+    fun flowOfPersonNames(){
+        viewModelScope.launch {
+            flowRepository.flowOfPersonNames().collectLatest { name ->
+                Log.d(TAG,"name is $name")
+                _flowOfPersonNames.value = name
+            }
+        }
+    }
 
     fun flowWithOperator(){
         viewModelScope.launch {

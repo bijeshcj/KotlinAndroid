@@ -16,6 +16,11 @@ class FlowRepository {
 
     var counter = 1
 
+
+    fun flowOfPersonNames(): Flow<String>{
+        return flowOf("rey","emd","alex","mari","peter")
+    }
+
     fun flowWithOperator() = flow {
         while(counter <= 10) {
             emit(counter++)

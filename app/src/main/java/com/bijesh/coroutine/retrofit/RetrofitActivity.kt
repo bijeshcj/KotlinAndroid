@@ -46,7 +46,9 @@ class RetrofitActivity : AppCompatActivity() {
         downloadPdfFileRx(this)
     }
 
-
+    /**
+     * POC for downloading the pdf
+     */
     fun downloadPdfFileRx(context: Context) {
         RetrofitClient.localApi.downloadPDFRx()
             .map { responseBody ->

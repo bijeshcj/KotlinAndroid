@@ -5,9 +5,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bijesh.coroutine.databinding.ActivityCoroutineMainBinding
 import com.bijesh.coroutine.viewmodels.CoroutineViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.math.log
 import kotlin.time.measureTime
 
 class CoroutineMainActivity :  AppCompatActivity() {
@@ -37,7 +42,7 @@ class CoroutineMainActivity :  AppCompatActivity() {
         }
 
         binding.btnCoroutine?.setOnClickListener {
-            GlobalScope.launch {
+//            GlobalScope.launch {
 //                coroutineViewModel.timeoutWithPolling()
 //                coroutineViewModel.anotherCoroutineTimeout()
 //                val timeTaken = measureTime {
@@ -48,11 +53,11 @@ class CoroutineMainActivity :  AppCompatActivity() {
 //                println(timeTaken)
 
 //                coroutineViewModel.asyncWithLazy()
-                coroutineViewModel.structuredConcurrencyWithAsync()
+//                coroutineViewModel.structuredConcurrencyWithAsync()
 
-            }
+//            }
 
-
+          startUnConfinedExample()
 
 //        binding?.btnCoroutine?.setOnClickListener{
 //            GlobalScope.launch {
@@ -62,6 +67,24 @@ class CoroutineMainActivity :  AppCompatActivity() {
 
 
         }
+    }
+
+
+    private fun startUnConfinedExample(){
+        CoroutineScope(Dispatchers.Unconfined).launch{
+            logThread("Started in unconfined")
+
+            withContext(Dispatchers.IO){
+                delay(5000)
+                logThread("Switching to main")
+                binding.textView2.text = "Update in main thread"
+            }
+            logThread("Back to unconfined")
+        }
+    }
+
+    private fun logThread(message:String){
+        println("$message : ${Thread.currentThread().name}")
 
     }
 }

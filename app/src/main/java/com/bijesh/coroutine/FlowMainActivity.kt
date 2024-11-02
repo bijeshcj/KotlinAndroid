@@ -8,10 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bijesh.coroutine.databinding.ActivityFlowMainBinding
 import com.bijesh.coroutine.viewmodels.FlowViewModel
+import com.bijesh.coroutine.viewmodels.FlowViewModel.Companion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,11 +34,28 @@ class FlowMainActivity : AppCompatActivity() {
         binding.buttonFlow.setOnClickListener{
 
             lifecycleScope.launch {
-                flowViewModel.flowWithOperator()
-                flowViewModel.flowOperator.collect{
-                    Log.d(TAG,"$it")
+                flowOf("Chennai","London","Aberdeen","Glasgow","Dundee","Edinburgh").collect{ city ->
+                    Log.d(TAG,"city is $city")
+                    binding.textViewFlow.text = city
+                    delay(5000)
                 }
             }
+
+//            lifecycleScope.launch {
+//                flowViewModel.flowOfPersonNames()
+//                flowViewModel.flowOfPersonNames.collectLatest { name ->
+//                    Log.d(TAG,"name is $name")
+//                    binding.textViewFlow.text = name
+//                }
+//            }
+
+
+//            lifecycleScope.launch {
+//                flowViewModel.flowWithOperator()
+//                flowViewModel.flowOperator.collect{
+//                    Log.d(TAG,"$it")
+//                }
+//            }
 
 
 //            flowViewModel.withContextDemo()

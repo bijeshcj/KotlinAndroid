@@ -5,14 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bijesh.coroutine.R
 import com.bijesh.coroutine.databinding.ActivityRxjavaMainBinding
+import com.bijesh.coroutine.models.User
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Arrays
 
@@ -28,17 +32,84 @@ class RxJavaMainActivity : AppCompatActivity() {
 
         with(binding){
             this?.btnRxJava2?.setOnClickListener{
+
+                rxJavaViewModel.filterOperator()
+                rxJavaViewModel.filterOperator.observe(this@RxJavaMainActivity){ response ->
+                    Log.d(TAG,"$response")
+                    tvRxJava2.text = "$response"
+                }
+
+//                filterOperator()
+
+//                rxJavaViewModel.createOperator()
+//                rxJavaViewModel.createOperator.observe(this@RxJavaMainActivity){response ->
+//                    Log.d(TAG,"$response")
+//                    tvRxJava2.text = "$response"
+//                }
+
+//                rxJavaViewModel.timerOperator()
+//                rxJavaViewModel.timerOperator.observe(this@RxJavaMainActivity){ response ->
+//                    Log.d(TAG,"$response")
+//                    tvRxJava2.text = "$response"
+//                }
+
+//                rxJavaViewModel.fromIntervalOperator()
+//                rxJavaViewModel.fromInterval.observe(this@RxJavaMainActivity){ response ->
+//                    Log.d(TAG,"$response")
+//                    tvRxJava2.text = "$response"
+//                }
+
+//                rxJavaViewModel.fromRangeOperator()
+//                rxJavaViewModel.fromRangeOperator.observe(this@RxJavaMainActivity) { response ->
+//                    Log.d(TAG, "$response")
+//                    tvRxJava2.text = "$response"
+//                }
+
+//                rxJavaViewModel.fromIterable()
+//                 rxJavaViewModel.fromIterbaleLiveData.observe(this@RxJavaMainActivity,{ response ->
+//                     Log.d(TAG,"$response")
+//                     tvRxJava2.text = response
+//                 })
+
 //                simpleRx()
 //                simpleRx1()
-                fromOperator()
-                rxJavaViewModel.fromOperatorWithState()
-                rxJavaViewModel.fromOperatorLiveData.observe(this@RxJavaMainActivity){
-                    Log.d(TAG,"from live data ${it.contentToString()}")
-                }
+
+
+
+//                fromOperator()
+//                rxJavaViewModel.fromOperatorWithState()
+//                rxJavaViewModel.fromOperatorLiveData.observe(this@RxJavaMainActivity){
+//                    Log.d(TAG,"from live data ${it.contentToString()}")
+//                }
+
             }
         }
 
     }
+
+    val listOfUsers = mutableListOf(
+        User(1,"Rohit",40),
+        User(2,"Karthik",32),
+        User(3,"Sam",30),
+        User(4,"Peter",45),
+        User(5,"Ramesh",25),
+        User(6,"Suresh",18),
+    )
+
+    @SuppressLint("CheckResult")
+    private fun filterOperator(){
+       Observable.fromIterable(listOfUsers)
+           .filter { it.age > 30 }
+           .subscribe(
+               { response ->
+                   Log.d(TAG,"$response")
+               },
+               {
+                   Log.e(TAG,it.toString())
+               }
+           )
+    }
+
 
     private fun fromOperator(){
         rxJavaViewModel.fromOperator().subscribe(object : Observer<Array<Int>>{
